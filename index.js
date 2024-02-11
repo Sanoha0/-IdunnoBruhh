@@ -22,11 +22,18 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
+let touchStartX, touchStartY;
 
+// Event listeners
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
+GameBoard.addEventListener("touchstart", handleTouchStart, false);
+GameBoard.addEventListener("touchmove", handleTouchMove, false);
 
+// Start the game
 gameStart();
+
+// Functions
 
 function gameStart() {
     running = true;
@@ -64,6 +71,9 @@ function resetGame() {
         { x: UnitSize, y: 0 },
         { x: 0, y: 0 }
     ];
+    // Remove touch event listeners to prevent memory leaks
+    GameBoard.removeEventListener("touchstart", handleTouchStart);
+    GameBoard.removeEventListener("touchmove", handleTouchMove);
     gameStart();
 }
 
@@ -83,8 +93,7 @@ function drawFood() {
 }
 
 function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, 
-                    y: snake[0].y + yVelocity };
+    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
     snake.unshift(head);
 
     const ateFood = snake[0].x === foodX && snake[0].y === foodY;
@@ -131,6 +140,44 @@ function changeDirection(event) {
     if (keyPressed === DOWN && !goingUp) {
         xVelocity = 0;
         yVelocity = UnitSize;
+    }
+}
+
+function handleTouchStart(event) {
+    if (event.targetTouches.length === 1) {
+        const touch = event.targetTouches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        event.preventDefault();
+    }
+}
+
+function handleTouchMove(event) {
+    if (event.targetTouches.length === 1) {
+        const touch = event.targetTouches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // horizontal movement
+            if (deltaX > 0 && xVelocity !== -UnitSize) {
+                xVelocity = UnitSize;
+                yVelocity = 0;
+            } else if (deltaX < 0 && xVelocity !== UnitSize) {
+                xVelocity = -UnitSize;
+                yVelocity = 0;
+            }
+        } else {
+            // vertical movement
+            if (deltaY > 0 && yVelocity !== -UnitSize) {
+                xVelocity = 0;
+                yVelocity = UnitSize;
+            } else if (deltaY < 0 && yVelocity !== UnitSize) {
+                xVelocity = 0;
+                yVelocity = -UnitSize;
+            }
+        }
+        event.preventDefault();
     }
 }
 
