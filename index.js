@@ -5,10 +5,11 @@ const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
 const BoardBg = "black";
 const UnitSize = 25;
-const maxApples = 5; // New constant for maximum apples
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
+let foodX;
+let foodY;
 let score = 0;
 let snake = [
     { x: UnitSize * 4, y: 0 },
@@ -17,7 +18,6 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
-let apples = []; // New array to hold apples
 
 window.addEventListener("keydown", changeDirection);
 
@@ -53,30 +53,24 @@ function clearBoard() {
 }
 
 function createFood() {
-    while (apples.length < maxApples) {
-        const appleX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
-        const appleY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
-        const appleColor = getRandomColor();
-        apples.push({ x: appleX, y: appleY, color: appleColor });
-    }
+    foodX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+    foodY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
 }
 
 function drawFood() {
-    apples.forEach(apple => {
-        ctx.fillStyle = apple.color;
-        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
-    });
+    ctx.fillStyle = FoodColor;
+    ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
 function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+    const head = { x: snake[0].x + xVelocity, 
+                    y: snake[0].y + yVelocity };
     snake.unshift(head);
 
-    const ateFood = apples.some(apple => apple.x === head.x && apple.y === head.y);
+    const ateFood = snake[0].x === foodX && snake[0].y === foodY;
     if (ateFood) {
         score += 10;
         ScoreText.textContent = "Score: " + score;
-        apples = apples.filter(apple => apple.x !== head.x || apple.y !== head.y);
         createFood();
     } else {
         snake.pop();
@@ -85,7 +79,7 @@ function moveSnake() {
 
 function drawSnake() {
     snake.forEach(segment => {
-        ctx.fillStyle = getRandomColor();
+        ctx.fillStyle = getRandomColor(); // Function to get a random color for the snake
         ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
     });
 }
@@ -134,6 +128,6 @@ function displayGameOver() {
 }
 
 function getRandomColor() {
-    const colors = ["red", "yellow", "green", "blue", "purple", "orange"];
+    const colors = ["red", "yellow", "green", "blue", "purple", "orange"]; // Add more colors if needed
     return colors[Math.floor(Math.random() * colors.length)];
 }
