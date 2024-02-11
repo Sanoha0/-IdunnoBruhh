@@ -1,14 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
+/* Existing CSS styles */
 #GameContainer {
     text-align: center;
 }
@@ -29,5 +19,20 @@ body {
     height: 40px;
     border: 2px solid;
     border-radius: 10px;
+    cursor: pointer;
+}
+
+/* New CSS for touch buttons */
+#TouchButtons {
+    margin-top: 20px;
+}
+
+#TouchButtons button {
+    font-size: 16px;
+    width: 50px;
+    height: 30px;
+    margin: 5px;
+    border: 2px solid #000;
+    border-radius: 5px;
     cursor: pointer;
 }
