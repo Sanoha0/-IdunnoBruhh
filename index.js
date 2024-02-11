@@ -1,12 +1,14 @@
-const GameBoard = document.getElementById("GameBoard");
+const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
-const ScoreText = document.getElementById("Score");
+const ScoreText = document.querySelector("#Score");
+const ResetBtn = document.querySelector("#ResetBtn");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
+const BoardBg = "black";
+const SnakeColor = "lightblue";
+const SnakeBorder = "black";
+const FoodColor = "red";
 const UnitSize = 25;
-const BoardBg = "black"; // Define background color
-const SnakeColor = "lightblue"; // Define snake color
-const FoodColor = "red"; // Define food color
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
@@ -22,12 +24,13 @@ let snake = [
 ];
 
 window.addEventListener("keydown", changeDirection);
+ResetBtn.addEventListener("click", resetGame);
 
 gameStart();
 
 function gameStart() {
     running = true;
-    ScoreText.textContent = "Score: " + score;
+    ScoreText.textContent = score;
     createFood();
     drawFood();
     nextTick();
@@ -47,6 +50,21 @@ function nextTick() {
             }
         }, 75);
     }
+}
+
+function resetGame() {
+    running = false;
+    score = 0;
+    xVelocity = UnitSize;
+    yVelocity = 0;
+    snake = [
+        { x: UnitSize * 4, y: 0 },
+        { x: UnitSize * 3, y: 0 },
+        { x: UnitSize * 2, y: 0 },
+        { x: UnitSize, y: 0 },
+        { x: 0, y: 0 }
+    ];
+    gameStart();
 }
 
 function clearBoard() {
