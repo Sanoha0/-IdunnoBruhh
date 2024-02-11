@@ -131,3 +131,5 @@ function getRandomColor() {
     const colors = ["red", "yellow", "green", "blue", "purple", "orange"]; // Add more colors if needed
     return colors[Math.floor(Math.random() * colors.length)];
 }
+const GameBoard = document.querySelector("#GameBoard");
+const ctx = GameBoard.getContext("2d");
