@@ -7,13 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<audio autoplay loop>
+  <source src="8bit.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
 <div id="GameContainer">
     <canvas id="GameBoard"></canvas>
     <div id="ButtonContainer">
-        <button id="LeftButton">LEFT</button>
         <button id="UpButton">UP</button>
-        <button id="RightButton">RIGHT</button>
+        <div>
+            <button id="LeftButton">LEFT</button>
+            <button id="RightButton">RIGHT</button>
+        </div>
         <button id="DownButton">DOWN</button>
         <button id="ResetBtn">Reset</button>
     </div>
