@@ -16,8 +16,6 @@ const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
-let foodX;
-let foodY;
 let score = 0;
 let snake = [
     { x: UnitSize * 4, y: 0 },
@@ -26,6 +24,7 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
+let apples = [];
 
 // Event listeners
 window.addEventListener("keydown", changeDirection);
@@ -40,8 +39,8 @@ gameStart();
 function gameStart() {
     running = true;
     ScoreText.textContent = score;
-    createFood();
-    drawFood();
+    createApple(3); // Create 3 apples
+    drawApples();
     nextTick();
 }
 
@@ -49,7 +48,7 @@ function nextTick() {
     if (running) {
         setTimeout(() => {
             clearBoard();
-            drawFood();
+            drawApples();
             moveSnake();
             drawSnake();
             if (!checkGameOver()) {
@@ -81,14 +80,19 @@ function clearBoard() {
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
-function createFood() {
-    foodX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
-    foodY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+function createApple(count) {
+    for (let i = 0; i < count; i++) {
+        const appleX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+        const appleY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+        apples.push({ x: appleX, y: appleY });
+    }
 }
 
-function drawFood() {
-    ctx.fillStyle = FoodColor;
-    ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
+function drawApples() {
+    apples.forEach(apple => {
+        ctx.fillStyle = FoodColor;
+        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
+    });
 }
 
 function moveSnake() {
@@ -96,11 +100,11 @@ function moveSnake() {
                     y: snake[0].y + yVelocity };
     snake.unshift(head);
 
-    const ateFood = snake[0].x === foodX && snake[0].y === foodY;
+    const ateFood = apples.some(apple => apple.x === snake[0].x && apple.y === snake[0].y);
     if (ateFood) {
         score += 10;
         ScoreText.textContent = "Score: " + score;
-        createFood();
+        createApple(1); // Create a new apple
     } else {
         snake.pop();
     }
