@@ -8,9 +8,7 @@ const LeftButton = document.querySelector("#LeftButton");
 const RightButton = document.querySelector("#RightButton");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
-const BoardBg = "black";
 const UnitSize = 25;
-const MaxApples = 5; // Maximum number of apples allowed
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
@@ -18,10 +16,8 @@ let score = 0;
 let snake = [{ x: 0, y: 0 }];
 let apples = [];
 
-// Background Animation
 let gradientOffset = 0;
 
-// Event listeners
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
 UpButton.addEventListener("click", () => changeDirection({ key: "ArrowUp" }));
@@ -34,7 +30,7 @@ gameStart();
 function gameStart() {
     running = true;
     ScoreText.textContent = score;
-    createApples(MaxApples); // Create apples up to the maximum allowed
+    createApples(5);
     drawApples();
     nextTick();
     animateBackground();
@@ -66,7 +62,7 @@ function resetGame() {
 }
 
 function clearBoard() {
-    ctx.fillStyle = BoardBg;
+    ctx.fillStyle = "black";
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
@@ -82,7 +78,7 @@ function createApples(count) {
 
 function drawApples() {
     apples.forEach(apple => {
-        ctx.fillStyle = "red"; // Apple color
+        ctx.fillStyle = "red";
         ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
     });
 }
@@ -97,8 +93,8 @@ function moveSnake() {
         score += 10;
         ScoreText.textContent = "Score: " + score;
         apples.splice(ateFoodIndex, 1);
-        createApples(1); // Create a new apple
-        updateSnakeSizeAndColor(); // Update snake size and color
+        createApples(1);
+        updateSnakeSizeAndColor();
     } else {
         snake.pop();
     }
@@ -106,8 +102,8 @@ function moveSnake() {
 
 function drawSnake() {
     snake.forEach((segment, index) => {
-        let hue = (index / snake.length) * 360; // Hues from 0 to 360
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`; // Rainbow-colored snake
+        let hue = (index / snake.length) * 360;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
         ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
     });
 }
@@ -148,7 +144,12 @@ function checkGameOver() {
     const hitTopWall = snake[0].y < 0;
     const hitBottomWall = snake[0].y > GameHeight - UnitSize;
 
-    return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
+    return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall || isSnakeCollision();
+}
+
+function isSnakeCollision() {
+    const [head, ...body] = snake;
+    return body.some(segment => segment.x === head.x && segment.y === head.y);
 }
 
 function displayGameOver() {
@@ -156,10 +157,7 @@ function displayGameOver() {
 }
 
 function updateSnakeSizeAndColor() {
-    // Increase snake length by 1 block
     snake.push({});
-    // Change snake color
-    snakeColor = generateRandomColor();
 }
 
 function generateRandomColor() {
@@ -178,14 +176,14 @@ function animateBackground() {
     setInterval(() => {
         gradientOffset += 0.01;
         const gradient = ctx.createLinearGradient(0, 0, GameWidth, GameHeight);
-        gradient.addColorStop(0, "rgb(0, 0, 139)"); // Dark blue
-        gradient.addColorStop(0.5, "rgb(25, 25, 112)"); // Midnight blue
-        gradient.addColorStop(1, "rgb(0, 0, 128)"); // Navy
+        gradient.addColorStop(0, "rgb(0, 0, 139)");
+        gradient.addColorStop(0.5, "rgb(25, 25, 112)");
+        gradient.addColorStop(1, "rgb(0, 0, 128)");
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, GameWidth, GameHeight);
         drawStars();
-    }, 100);
+    }, 200);
 }
 
 function drawStars() {
@@ -201,7 +199,6 @@ function drawStars() {
     }
 }
 
-// Adjust button font color
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => {
     button.style.color = "white";
