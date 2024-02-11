@@ -1,49 +1,32 @@
-/* Existing CSS styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-#GameContainer {
+#GameContainer{
     text-align: center;
 }
 
-#GameBoard {
+#GameBoard{
     border: 3px solid;
 }
 
 #Score {
+    font-family: "Ariel", cursive;
     font-size: 24px;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-#ResetBtn {
-    font-size: 18px;
-    margin-top: 10px;
+button {
+    font-family: "Permanent Marker", cursive;
+    font-size: 24px;
     width: 100px;
-    height: 40px;
-    border: 2px solid;
-    border-radius: 10px;
+    height: 50px;
+    border: 4px solid;
+    border-radius: 15px;
     cursor: pointer;
+    margin: 0 10px; /* Adjust button spacing */
+    color: white; /* Button font color */
 }
 
-/* New CSS for touch buttons */
-#TouchButtons {
-    margin-top: 20px;
-}
-
-#TouchButtons button {
-    font-size: 18px; /* Increased font size */
-    width: 120px; /* Increased width */
-    height: 70px; /* Increased height */
-    margin: 15px; /* Increased margin */
-    border: 3px solid #000; /* Increased border width */
-    border-radius: 8px; /* Increased border radius */
-    cursor: pointer;
+#ButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Add margin for spacing */
 }
