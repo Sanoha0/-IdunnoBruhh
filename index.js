@@ -4,6 +4,30 @@ const ScoreText = document.getElementById("Score");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
 const UnitSize = 25;
+const BoardBg = "black"; // Define background color
+const SnakeColor = "lightblue"; // Define snake color
+const FoodColor = "red"; // Define food color
+let running = false;
+let xVelocity = UnitSize;
+let yVelocity = 0;
+let foodX;
+let foodY;
+let score = 0;
+let snake = [
+    { x: UnitSize * 4, y: 0 },
+    { x: UnitSize * 3, y: 0 },
+    { x: UnitSize * 2, y: 0 },
+    { x: UnitSize, y: 0 },
+    { x: 0, y: 0 }
+];
+
+
+const GameBoard = document.getElementById("GameBoard");
+const ctx = GameBoard.getContext("2d");
+const ScoreText = document.getElementById("Score");
+const GameWidth = GameBoard.width;
+const GameHeight = GameBoard.height;
+const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
