@@ -1,39 +1,30 @@
 #GameContainer {
     position: relative;
+    text-align: center;
 }
 
 canvas {
-    position: absolute;
+    border: 3px solid;
+}
+
+#GameBoard {
+    background-color: black;
+}
+
+#Score {
+    font-size: 24px;
+    color: white;
+    margin-bottom: 10px;
 }
 
 #ButtonContainer {
     position: absolute;
-    top: 0;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-body {
-    margin: 0;
-    overflow: hidden;
-}
-
-#GameContainer{
-    text-align: center;
-}
-
-#GameBoard{
-    border: 3px solid;
-}
-
-#Score {
-    font-family: "Ariel", cursive;
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
 button {
-    font-family: "Permanent Marker", cursive;
     font-size: 24px;
     width: 100px;
     height: 50px;
@@ -41,12 +32,6 @@ button {
     border-radius: 15px;
     cursor: pointer;
     margin: 0 10px;
-    color: white;
-}
-
-#ButtonContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
+    background-color: white;
+    color: black;
 }
