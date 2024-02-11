@@ -178,9 +178,9 @@ function animateBackground() {
     setInterval(() => {
         gradientOffset += 0.01;
         const gradient = ctx.createLinearGradient(0, 0, GameWidth, GameHeight);
-        gradient.addColorStop(0, "rgb(30, 144, 255)"); // Dodger blue
-        gradient.addColorStop(0.5, "rgb(135, 206, 235)"); // Sky blue
-        gradient.addColorStop(1, "rgb(240, 248, 255)"); // Alice blue
+        gradient.addColorStop(0, "rgb(0, 0, 139)"); // Dark blue
+        gradient.addColorStop(0.5, "rgb(25, 25, 112)"); // Midnight blue
+        gradient.addColorStop(1, "rgb(0, 0, 128)"); // Navy
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, GameWidth, GameHeight);
@@ -200,5 +200,11 @@ function drawStars() {
         ctx.fill();
     }
 }
+
+// Adjust button font color
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+    button.style.color = "white";
+});
 
 updateSnakeColor();
