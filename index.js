@@ -1,9 +1,8 @@
-const GameBoard = document.querySelector("#GameBoard");
+const GameBoard = document.getElementById("GameBoard");
 const ctx = GameBoard.getContext("2d");
-const ScoreText = document.querySelector("#Score");
+const ScoreText = document.getElementById("Score");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
-const BoardBg = "black";
 const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
@@ -25,7 +24,7 @@ gameStart();
 
 function gameStart() {
     running = true;
-    ScoreText.textContent = score;
+    ScoreText.textContent = "Score: " + score;
     createFood();
     drawFood();
     nextTick();
@@ -48,7 +47,7 @@ function nextTick() {
 }
 
 function clearBoard() {
-    ctx.fillStyle = BoardBg;
+    ctx.fillStyle = "black";
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
@@ -58,7 +57,7 @@ function createFood() {
 }
 
 function drawFood() {
-    ctx.fillStyle = FoodColor;
+    ctx.fillStyle = "red"; // Fixed color for food
     ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
@@ -79,7 +78,7 @@ function moveSnake() {
 
 function drawSnake() {
     snake.forEach(segment => {
-        ctx.fillStyle = getRandomColor(); // Function to get a random color for the snake
+        ctx.fillStyle = "lightgreen"; // Fixed color for snake
         ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
     });
 }
@@ -126,10 +125,3 @@ function checkGameOver() {
 function displayGameOver() {
     console.log("Game Over!");
 }
-
-function getRandomColor() {
-    const colors = ["red", "yellow", "green", "blue", "purple", "orange"]; // Add more colors if needed
-    return colors[Math.floor(Math.random() * colors.length)];
-}
-const GameBoard = document.querySelector("#GameBoard");
-const ctx = GameBoard.getContext("2d");
