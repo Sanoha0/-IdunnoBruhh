@@ -21,6 +21,10 @@ let snake = [
     { x: 0, y: 0 }
 ];
 
+const FoodColor = "red"; // Define food color
+const FoodColor = "green"; // Define food color
+const FoodColor = "yellow"; // Define food color
+
 
 const GameBoard = document.getElementById("GameBoard");
 const ctx = GameBoard.getContext("2d");
