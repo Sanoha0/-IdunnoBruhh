@@ -18,10 +18,6 @@
     border-radius: 15px;
     cursor: pointer;
 }
-#GameBoard {
-    border: 3px solid;
-}
-
 canvas {
     display: block;
     margin: 0 auto;
