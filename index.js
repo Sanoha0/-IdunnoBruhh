@@ -21,31 +21,6 @@ let snake = [
     { x: 0, y: 0 }
 ];
 
-const FoodColor = "red"; // Define food color
-const FoodColor = "green"; // Define food color
-const FoodColor = "yellow"; // Define food color
-
-
-const GameBoard = document.getElementById("GameBoard");
-const ctx = GameBoard.getContext("2d");
-const ScoreText = document.getElementById("Score");
-const GameWidth = GameBoard.width;
-const GameHeight = GameBoard.height;
-const UnitSize = 25;
-let running = false;
-let xVelocity = UnitSize;
-let yVelocity = 0;
-let foodX;
-let foodY;
-let score = 0;
-let snake = [
-    { x: UnitSize * 4, y: 0 },
-    { x: UnitSize * 3, y: 0 },
-    { x: UnitSize * 2, y: 0 },
-    { x: UnitSize, y: 0 },
-    { x: 0, y: 0 }
-];
-
 window.addEventListener("keydown", changeDirection);
 
 gameStart();
@@ -75,7 +50,7 @@ function nextTick() {
 }
 
 function clearBoard() {
-    ctx.fillStyle = "black";
+    ctx.fillStyle = BoardBg;
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
@@ -85,7 +60,7 @@ function createFood() {
 }
 
 function drawFood() {
-    ctx.fillStyle = "red"; // Fixed color for food
+    ctx.fillStyle = FoodColor;
     ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
@@ -106,7 +81,7 @@ function moveSnake() {
 
 function drawSnake() {
     snake.forEach(segment => {
-        ctx.fillStyle = "lightgreen"; // Fixed color for snake
+        ctx.fillStyle = SnakeColor;
         ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
     });
 }
