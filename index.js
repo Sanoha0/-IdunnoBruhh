@@ -1,3 +1,5 @@
+// JavaScript (index.js)
+
 const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
 const ScoreText = document.querySelector("#Score");
@@ -17,6 +19,7 @@ let snake = [{ x: 0, y: 0 }];
 let apples = [];
 
 let gradientOffset = 0;
+let animationInterval;
 
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
@@ -173,12 +176,12 @@ function updateSnakeColor() {
 }
 
 function animateBackground() {
-    setInterval(() => {
-        gradientOffset += 0.01;
+    animationInterval = setInterval(() => {
+        gradientOffset += 0.001;
         const gradient = ctx.createLinearGradient(0, 0, GameWidth, GameHeight);
-        gradient.addColorStop(0, "rgb(0, 0, 139)");
-        gradient.addColorStop(0.5, "rgb(25, 25, 112)");
-        gradient.addColorStop(1, "rgb(0, 0, 128)");
+        gradient.addColorStop(0, `rgba(0, 0, 139, ${Math.abs(Math.sin(gradientOffset)) * 0.5})`);
+        gradient.addColorStop(0.5, `rgba(25, 25, 112, ${Math.abs(Math.sin(gradientOffset)) * 0.5})`);
+        gradient.addColorStop(1, `rgba(0, 0, 128, ${Math.abs(Math.sin(gradientOffset)) * 0.5})`);
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, GameWidth, GameHeight);
