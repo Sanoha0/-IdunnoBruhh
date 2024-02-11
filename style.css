@@ -39,11 +39,11 @@ body {
 }
 
 #TouchButtons button {
-    font-size: 16px;
-    width: 80px; /* Increased width */
-    height: 50px; /* Increased height */
-    margin: 10px; /* Increased margin */
-    border: 2px solid #000;
-    border-radius: 5px;
+    font-size: 18px; /* Increased font size */
+    width: 120px; /* Increased width */
+    height: 70px; /* Increased height */
+    margin: 15px; /* Increased margin */
+    border: 3px solid #000; /* Increased border width */
+    border-radius: 8px; /* Increased border radius */
     cursor: pointer;
 }
