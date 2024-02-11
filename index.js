@@ -98,7 +98,7 @@ function moveSnake() {
         ScoreText.textContent = "Score: " + score;
         apples.splice(ateFoodIndex, 1);
         createApples(1); // Create a new apple
-        snake.push({}); // Add a new segment to the snake's body
+        updateSnakeSizeAndColor(); // Update snake size and color
     } else {
         snake.pop();
     }
@@ -155,13 +155,32 @@ function displayGameOver() {
     console.log("Game Over!");
 }
 
+function updateSnakeSizeAndColor() {
+    // Increase snake length by 1 block
+    snake.push({});
+    // Change snake color
+    snakeColor = generateRandomColor();
+}
+
+function generateRandomColor() {
+    const colors = ["red", "blue", "yellow"];
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+}
+
+function updateSnakeColor() {
+    setInterval(() => {
+        snakeColor = generateRandomColor();
+    }, 1000);
+}
+
 function animateBackground() {
     setInterval(() => {
         gradientOffset += 0.01;
         const gradient = ctx.createLinearGradient(0, 0, GameWidth, GameHeight);
-        gradient.addColorStop(0, "rgba(0,0,0,0.8)");
-        gradient.addColorStop(0.5, "rgba(0,0,50,0.6)");
-        gradient.addColorStop(1, "rgba(0,0,100,0.8)");
+        gradient.addColorStop(0, "rgb(30, 144, 255)"); // Dodger blue
+        gradient.addColorStop(0.5, "rgb(135, 206, 235)"); // Sky blue
+        gradient.addColorStop(1, "rgb(240, 248, 255)"); // Alice blue
 
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, GameWidth, GameHeight);
@@ -182,50 +201,4 @@ function drawStars() {
     }
 }
 
-// Your existing code goes here
-
-// Define a variable to store the current color of the snake
-let snakeColor = "lightblue";
-
-// Function to generate a random color among red, blue, and yellow
-function generateRandomColor() {
-    const colors = ["red", "blue", "yellow"];
-    const randomIndex = Math.floor(Math.random() * colors.length);
-    return colors[randomIndex];
-}
-
-// Function to update the snake color every second
-function updateSnakeColor() {
-    setInterval(() => {
-        snakeColor = generateRandomColor();
-    }, 1000);
-}
-
-// Function to update the snake size and color when it eats an apple
-function updateSnakeSizeAndColor() {
-    // Increase snake length by 1 block
-    snake.push({});
-    // Change snake color
-    snakeColor = generateRandomColor();
-}
-
-// Modify the moveSnake function to update snake size and color when it eats an apple
-function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
-    snake.unshift(head);
-
-    const ateFoodIndex = apples.findIndex(apple => apple.x === snake[0].x && apple.y === snake[0].y);
-    if (ateFoodIndex !== -1) {
-        const eatenApple = apples[ateFoodIndex];
-        score += 10;
-        ScoreText.textContent = "Score: " + score;
-        apples.splice(ateFoodIndex, 1);
-        createApples(1); // Create a new apple
-        updateSnakeSizeAndColor(); // Update snake size and color
-    } else {
-        snake.pop();
-    }
-}
-
-// Call the updateSnakeColor function to start the color change
 updateSnakeColor();
