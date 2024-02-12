@@ -136,16 +136,22 @@ function moveSnake() {
     const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
     snake.unshift(head);
 
+    let appleEaten = false;
+
     apples.forEach((apple, index) => {
         if (apple.x === snake[0].x && apple.y === snake[0].y) {
             score += 10;
             ScoreText.textContent = "Score: " + score;
             apples.splice(index, 1);
-            placeApples();
+            appleEaten = true;
         } else {
             apple.moved = true; // Set moved flag for apples not eaten by the snake
         }
     });
+
+    if (appleEaten) {
+        placeApples(); // Place new apples if any were eaten
+    }
 
     snake.pop();
 }
