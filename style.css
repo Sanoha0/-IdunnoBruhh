@@ -18,3 +18,13 @@
     border-radius: 15px;
     cursor: pointer;
 }
+#UpBtn, #DownBtn, #LeftBtn, #RightBtn {
+    font-family: "Permanent Marker", cursive;
+    font-size: 24px;
+    width: 100px;
+    height: 50px;
+    border: 4px solid;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px; /* Adjust margin as needed */
+}
