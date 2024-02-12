@@ -1,7 +1,9 @@
+// Existing code
+
 document.addEventListener("DOMContentLoaded", function() {
     const GameBoard = document.querySelector("#GameBoard");
     const ctx = GameBoard.getContext("2d");
-    const ScoreText = document.querySelector("#ScoreText");
+    const ScoreText = document.querySelector("#Score");
     const ResetBtn = document.querySelector("#ResetBtn");
     const GameWidth = GameBoard.width;
     const GameHeight = GameBoard.height;
@@ -9,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const SnakeColor = "lightblue";
     const SnakeBorder = "black";
     const UnitSize = 25;
-    const maxApples = 3; // Maximum number of apples
     let running = false;
     let xVelocity = UnitSize;
     let yVelocity = 0;
@@ -21,6 +22,9 @@ document.addEventListener("DOMContentLoaded", function() {
         { x: UnitSize, y: 0 },
         { x: 0, y: 0 }
     ];
+
+    // New code
+    const maxApples = 3; // Maximum number of apples
     let apples = []; // Array to hold multiple apples
 
     window.addEventListener("keydown", changeDirection);
@@ -105,22 +109,66 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function moveSnake() {
-        // Snake movement logic
+        const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+        snake.unshift(head);
+        const ateFood = apples.some(apple => apple.x === head.x && apple.y === head.y);
+        if (ateFood) {
+            score += 10;
+            ScoreText.textContent = "Score: " + score;
+            createFood();
+        } else {
+            snake.pop();
+        }
     }
 
     function drawSnake() {
-        // Snake drawing logic
+        snake.forEach(segment => {
+            ctx.fillStyle = SnakeColor;
+            ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
+        });
     }
 
     function changeDirection(event) {
-        // Direction change logic
+        const keyPressed = event.key;
+        const LEFT = "ArrowLeft";
+        const UP = "ArrowUp";
+        const RIGHT = "ArrowRight";
+        const DOWN = "ArrowDown";
+        const goingUp = yVelocity === -UnitSize;
+        const goingDown = yVelocity === UnitSize;
+        const goingLeft = xVelocity === -UnitSize;
+        const goingRight = xVelocity === UnitSize;
+        if (keyPressed === LEFT && !goingRight) {
+            xVelocity = -UnitSize;
+            yVelocity = 0;
+        }
+        if (keyPressed === UP && !goingDown) {
+            xVelocity = 0;
+            yVelocity = -UnitSize;
+        }
+        if (keyPressed === RIGHT && !goingLeft) {
+            xVelocity = UnitSize;
+            yVelocity = 0;
+        }
+        if (keyPressed === DOWN && !goingUp) {
+            xVelocity = 0;
+            yVelocity = UnitSize;
+        }
     }
 
     function checkGameOver() {
-        // Game over logic
+        const hitLeftWall = snake[0].x < 0;
+        const hitRightWall = snake[0].x > GameWidth - UnitSize;
+        const hitTopWall = snake[0].y < 0;
+        const hitBottomWall = snake[0].y > GameHeight - UnitSize;
+        return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
     }
 
     function displayGameOver() {
-        // Game over display logic
+        running = false;
+        ctx.fillStyle = "white";
+        ctx.font = "40px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over", GameWidth / 2, GameHeight / 2);
     }
 });
