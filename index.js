@@ -7,7 +7,6 @@ const GameHeight = GameBoard.height;
 const BoardBg = "black";
 const SnakeColor = "lightblue";
 const SnakeBorder = "black";
-const AppleColors = ["red", "yellow", "lightgreen", "pastelgreen", "orange"];
 const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
@@ -72,36 +71,55 @@ function clearBoard() {
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
+function placeRedApple() {
+    const color = "red";
+    const position = getRandomPositionForColor();
+    apples.push({ x: position.x, y: position.y, color: color });
+}
+
+function placeGreenApple() {
+    const color = "green";
+    const position = getRandomPositionForColor();
+    apples.push({ x: position.x, y: position.y, color: color });
+}
+
+function placeYellowApple() {
+    const color = "yellow";
+    const position = getRandomPositionForColor();
+    apples.push({ x: position.x, y: position.y, color: color });
+}
+
+function placeOrangeApple() {
+    const color = "orange";
+    const position = getRandomPositionForColor();
+    apples.push({ x: position.x, y: position.y, color: color });
+}
+
+function placePaleGreenApple() {
+    const color = "palegreen";
+    const position = getRandomPositionForColor();
+    apples.push({ x: position.x, y: position.y, color: color });
+}
+
+function getRandomPositionForColor() {
+    const posX = Math.floor(Math.random() * GameWidth);
+    const posY = Math.floor(Math.random() * GameHeight);
+    return { x: posX, y: posY };
+}
+
 function createApples() {
-    const numRows = Math.floor(GameHeight / UnitSize);
-    const numCols = Math.floor(GameWidth / UnitSize);
-    
-    const numApples = 5;
-    const applesPerRow = Math.ceil(numApples / numRows);
-    const applesPerCol = Math.ceil(numApples / numCols);
+    const appleFunctions = [
+        placeRedApple,
+        placeGreenApple,
+        placeYellowApple,
+        placeOrangeApple,
+        placePaleGreenApple
+    ];
 
-    const applePositions = new Set(); // Set to store unique positions of apples
-
-    // Add existing apples' positions to the set
-    apples.forEach(apple => {
-        applePositions.add(`${apple.x},${apple.y}`);
-    });
-
-    // Generate new apples
-    for (let row = 0; row < numRows; row++) {
-        for (let col = 0; col < numCols; col++) {
-            if (apples.length >= numApples) break; // Ensure max of 5 apples
-            const posX = col * UnitSize;
-            const posY = row * UnitSize;
-            const position = `${posX},${posY}`;
-
-            // Check if the position is already occupied by an apple
-            if (!applePositions.has(position)) {
-                const color = AppleColors[Math.floor(Math.random() * AppleColors.length)];
-                apples.push({ x: posX, y: posY, color: color });
-                applePositions.add(position); // Add new position to the set
-            }
-        }
+    while (apples.length < 5) {
+        const randomIndex = Math.floor(Math.random() * appleFunctions.length);
+        const selectedFunction = appleFunctions[randomIndex];
+        selectedFunction();
     }
 }
 
