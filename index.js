@@ -39,7 +39,7 @@ function gameStart() {
 function nextTick() {
     if (running) {
         setTimeout(() => {
-            clearBoard();
+            clearBoard(); // Clear the board first
             drawFood();
             moveSnake();
             drawSnake();
