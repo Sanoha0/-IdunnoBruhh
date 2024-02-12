@@ -28,7 +28,7 @@ gameStart();
 
 function gameStart() {
     running = true;
-    ScoreText.textContent = score;
+    ScoreText.textContent = "Score: " + score;
     placeApples();
     drawApples();
     nextTick();
