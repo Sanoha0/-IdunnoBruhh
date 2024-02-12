@@ -1,21 +1,13 @@
-#GameContainer{
-    text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
 }
 
-#GameBoard{
-    border: 3px solid;
-    background-color: black;
-}
-#ScoreText{
-    font-family: "Ariel", cursive;
-    font-size: 40px;
-}
-#ResetBtn{
-    font-family: "Permanent Marker", cursive;
-    font-size: 24px;
-    width: 100px;
-    height: 50px;
-    border: 4px solid;
-    border-radius: 15px;
-    cursor: pointer;
+canvas {
+  border: 2px solid #333;
 }
