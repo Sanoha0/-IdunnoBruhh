@@ -93,19 +93,22 @@ document.addEventListener("DOMContentLoaded", function() {
         const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
         snake.unshift(head);
 
+        let ateFood = false;
         apples.forEach((apple, index) => {
             if (snake[0].x === apple.x && snake[0].y === apple.y) {
                 score += 10;
                 ScoreText.textContent = "Score: " + score;
                 apples.splice(index, 1);
-                createFood();
+                ateFood = true;
             }
         });
 
-        if (apples.length === 0) {
-            createFood();
-        } else {
+        if (!ateFood) {
             snake.pop();
+        }
+
+        if (apples.length === 0 || ateFood) {
+            createFood();
         }
     }
 
