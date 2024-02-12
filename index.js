@@ -7,10 +7,13 @@ const GameHeight = GameBoard.height;
 const BoardBg = "black";
 const SnakeColor = "lightblue";
 const SnakeBorder = "black";
+const FoodColor = "red";
 const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
+let foodX;
+let foodY;
 let score = 0;
 let snake = [
     { x: UnitSize * 4, y: 0 },
@@ -19,7 +22,6 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
-let apples = [];
 
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
@@ -28,9 +30,9 @@ gameStart();
 
 function gameStart() {
     running = true;
-    ScoreText.textContent = "Score: " + score;
-    placeApples();
-    drawApples();
+    ScoreText.textContent = score;
+    createFood();
+    drawFood();
     nextTick();
 }
 
@@ -38,9 +40,9 @@ function nextTick() {
     if (running) {
         setTimeout(() => {
             clearBoard();
+            drawFood();
             moveSnake();
             drawSnake();
-            drawApples();
             if (!checkGameOver()) {
                 nextTick();
             } else {
@@ -62,7 +64,6 @@ function resetGame() {
         { x: UnitSize, y: 0 },
         { x: 0, y: 0 }
     ];
-    apples = [];
     gameStart();
 }
 
@@ -71,95 +72,36 @@ function clearBoard() {
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
-function getRandomPosition() {
-    const posX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
-    const posY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
-    return { x: posX, y: posY };
+function createFood() {
+    foodX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+    foodY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
 }
 
-function placeRedApple() {
-    const color = "red";
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placeGreenApple() {
-    const color = "green";
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placeYellowApple() {
-    const color = "yellow";
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placeOrangeApple() {
-    const color = "orange";
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placePaleGreenApple() {
-    const color = "palegreen";
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placeApples() {
-    placeRedApple();
-    placeGreenApple();
-    placeYellowApple();
-    placeOrangeApple();
-    placePaleGreenApple();
-    apples.forEach(apple => {
-        apple.newlyAdded = true;
-    });
-}
-
-function drawApples() {
-    apples.forEach(apple => {
-        if (apple.moved || apple.newlyAdded) {
-            ctx.fillStyle = apple.color;
-            ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
-            apple.moved = false;
-            apple.newlyAdded = false;
-        }
-    });
+function drawFood() {
+    ctx.fillStyle = FoodColor;
+    ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
 function moveSnake() {
-    const headX = snake[0].x + xVelocity; 
-    const headY = snake[0].y + yVelocity;
-    const head = { x: headX, y: headY };
-
-    let appleEaten = false;
-
-    apples.forEach((apple, index) => {
-        if (apple.x === headX && apple.y === headY) {
-            score += 10;
-            ScoreText.textContent = "Score: " + score; // Update the score display
-            apples.splice(index, 1);
-            appleEaten = true;
-        } else {
-            apple.moved = true;
-        }
-    });
-
-    if (appleEaten) {
-        placeApples();
-    }
-
+    const head = { x: snake[0].x + xVelocity, 
+                    y: snake[0].y + yVelocity };
     snake.unshift(head);
-    snake.pop();
 
-    // Update snake velocity to move straight
-    if (xVelocity !== 0) {
-        yVelocity = 0;
-    } else if (yVelocity !== 0) {
-        xVelocity = 0;
+    const ateFood = snake[0].x === foodX && snake[0].y === foodY;
+    if (ateFood) {
+        score += 10;
+        ScoreText.textContent = "Score: " + score;
+        createFood();
+    } else {
+        snake.pop();
     }
+}
+
+function drawSnake() {
+    snake.forEach(segment => {
+        ctx.fillStyle = SnakeColor;
+        ctx.fillRect(segment.x, segment.y, UnitSize, UnitSize);
+    });
 }
 
 function changeDirection(event) {
@@ -190,4 +132,17 @@ function changeDirection(event) {
         xVelocity = 0;
         yVelocity = UnitSize;
     }
+}
+
+function checkGameOver() {
+    const hitLeftWall = snake[0].x < 0;
+    const hitRightWall = snake[0].x > GameWidth - UnitSize;
+    const hitTopWall = snake[0].y < 0;
+    const hitBottomWall = snake[0].y > GameHeight - UnitSize;
+
+    return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
+}
+
+function displayGameOver() {
+    console.log("Game Over!");
 }
