@@ -71,6 +71,12 @@ function clearBoard() {
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
+function getRandomPosition() {
+    const posX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+    const posY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+    return { x: posX, y: posY };
+}
+
 function placeRedApple() {
     const color = "red";
     const position = getRandomPosition();
@@ -101,12 +107,6 @@ function placePaleGreenApple() {
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
-function getRandomPosition() {
-    const posX = Math.floor(Math.random() * (GameWidth - UnitSize)); // Adjusted to ensure the apple stays within canvas
-    const posY = Math.floor(Math.random() * (GameHeight - UnitSize)); // Adjusted to ensure the apple stays within canvas
-    return { x: posX, y: posY };
-}
-
 function placeApples() {
     placeRedApple();
     placeGreenApple();
@@ -114,18 +114,15 @@ function placeApples() {
     placeOrangeApple();
     placePaleGreenApple();
     apples.forEach(apple => {
-        apple.newlyAdded = true; // Set newlyAdded flag for all apples after placement
+        apple.newlyAdded = true;
     });
 }
 
 function drawApples() {
     apples.forEach(apple => {
-        // Check if the apple has moved or is newly added
         if (apple.moved || apple.newlyAdded) {
             ctx.fillStyle = apple.color;
             ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
-
-            // Reset the flags
             apple.moved = false;
             apple.newlyAdded = false;
         }
@@ -133,30 +130,28 @@ function drawApples() {
 }
 
 function moveSnake() {
-    const headX = snake[0].x + xVelocity + UnitSize / 2; // Adjusted to check collision at center of the snake's head
-    const headY = snake[0].y + yVelocity + UnitSize / 2; // Adjusted to check collision at center of the snake's head
+    const headX = snake[0].x + xVelocity; 
+    const headY = snake[0].y + yVelocity;
     const head = { x: headX, y: headY };
-    snake.unshift(head);
 
     let appleEaten = false;
 
     apples.forEach((apple, index) => {
-        const appleCenterX = apple.x + UnitSize / 2;
-        const appleCenterY = apple.y + UnitSize / 2;
-        if (appleCenterX === headX && appleCenterY === headY) { // Adjusted collision detection to check for center of apple
+        if (apple.x === headX && apple.y === headY) {
             score += 10;
             ScoreText.textContent = "Score: " + score;
             apples.splice(index, 1);
             appleEaten = true;
         } else {
-            apple.moved = true; // Set moved flag for apples not eaten by the snake
+            apple.moved = true;
         }
     });
 
     if (appleEaten) {
-        placeApples(); // Place new apples if any were eaten
+        placeApples();
     }
 
+    snake.unshift(head);
     snake.pop();
 }
 
