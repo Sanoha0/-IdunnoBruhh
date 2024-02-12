@@ -4,6 +4,7 @@
 
 #GameBoard{
     border: 3px solid;
+    background-color: black;
 }
 #ScoreText{
     font-family: "Ariel", cursive;
