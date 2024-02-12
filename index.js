@@ -18,11 +18,8 @@ let xVelocity = UnitSize;
 let yVelocity = 0;
 let score = 0;
 let snake = [
-    { x: UnitSize * 4, y: 0 },
-    { x: UnitSize * 3, y: 0 },
-    { x: UnitSize * 2, y: 0 },
-    { x: UnitSize, y: 0 },
-    { x: 0, y: 0 }
+    { x: UnitSize * 2, y: 0 }, // Start with just two blocks
+    { x: UnitSize, y: 0 }
 ];
 let apples = [];
 
@@ -68,11 +65,8 @@ function resetGame() {
     xVelocity = UnitSize;
     yVelocity = 0;
     snake = [
-        { x: UnitSize * 4, y: 0 },
-        { x: UnitSize * 3, y: 0 },
         { x: UnitSize * 2, y: 0 },
-        { x: UnitSize, y: 0 },
-        { x: 0, y: 0 }
+        { x: UnitSize, y: 0 }
     ];
     apples = [];
     gameStart();
@@ -125,6 +119,8 @@ function moveSnake() {
     });
 
     if (appleEaten) {
+        // Add a new block to the end of the snake's body
+        snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
         placeApple();
     }
 
