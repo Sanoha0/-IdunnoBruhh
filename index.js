@@ -137,3 +137,57 @@ function moveSnake() {
     let appleEaten = false;
 
     apples.forEach((apple, index) => {
+        if (apple.x === headX && apple.y === headY) {
+            score += 10;
+            ScoreText.textContent = "Score: " + score; // Update the score display
+            apples.splice(index, 1);
+            appleEaten = true;
+        } else {
+            apple.moved = true;
+        }
+    });
+
+    if (appleEaten) {
+        placeApples();
+    }
+
+    snake.unshift(head);
+    snake.pop();
+
+    // Update snake velocity to move straight
+    if (xVelocity !== 0) {
+        yVelocity = 0;
+    } else if (yVelocity !== 0) {
+        xVelocity = 0;
+    }
+}
+
+function changeDirection(event) {
+    const keyPressed = event.key;
+    const LEFT = "ArrowLeft";
+    const UP = "ArrowUp";
+    const RIGHT = "ArrowRight";
+    const DOWN = "ArrowDown";
+
+    const goingUp = yVelocity === -UnitSize;
+    const goingDown = yVelocity === UnitSize;
+    const goingLeft = xVelocity === -UnitSize;
+    const goingRight = xVelocity === UnitSize;
+
+    if (keyPressed === LEFT && !goingRight) {
+        xVelocity = -UnitSize;
+        yVelocity = 0;
+    }
+    if (keyPressed === UP && !goingDown) {
+        xVelocity = 0;
+        yVelocity = -UnitSize;
+    }
+    if (keyPressed === RIGHT && !goingLeft) {
+        xVelocity = UnitSize;
+        yVelocity = 0;
+    }
+    if (keyPressed === DOWN && !goingUp) {
+        xVelocity = 0;
+        yVelocity = UnitSize;
+    }
+}
