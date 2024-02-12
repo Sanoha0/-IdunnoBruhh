@@ -93,25 +93,13 @@ document.addEventListener("DOMContentLoaded", function() {
         const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
         snake.unshift(head);
 
-        let ateFood = false;
-        let eatenAppleIndex = -1;
-        apples.forEach((apple, index) => {
-            if (snake[0].x === apple.x && snake[0].y === apple.y) {
-                score += 10;
-                ScoreText.textContent = "Score: " + score;
-                eatenAppleIndex = index;
-                ateFood = true;
-            }
-        });
-
+        let ateFood = checkEatFood();
+        
         if (!ateFood) {
             snake.pop();
         }
 
-        if (ateFood) {
-            apples.splice(eatenAppleIndex, 1);
-            createFood();
-        } else if (apples.length === 0) {
+        if (ateFood || apples.length === 0) {
             createFood();
         }
     }
@@ -166,5 +154,17 @@ document.addEventListener("DOMContentLoaded", function() {
         ctx.fillStyle = "white";
         ctx.font = "40px Arial";
         ctx.fillText("Game Over!", 200, 300);
+    }
+
+    function checkEatFood() {
+        for (let i = 0; i < apples.length; i++) {
+            if (snake[0].x === apples[i].x && snake[0].y === apples[i].y) {
+                apples.splice(i, 1);
+                score += 10;
+                ScoreText.textContent = "Score: " + score;
+                return true;
+            }
+        }
+        return false;
     }
 });
