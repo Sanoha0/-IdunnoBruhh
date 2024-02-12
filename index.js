@@ -38,9 +38,9 @@ function nextTick() {
     if (running) {
         setTimeout(() => {
             clearBoard();
-            drawApples();
             moveSnake();
             drawSnake();
+            drawApples();
             if (!checkGameOver()) {
                 nextTick();
             } else {
@@ -113,12 +113,22 @@ function placeApples() {
     placeYellowApple();
     placeOrangeApple();
     placePaleGreenApple();
+    apples.forEach(apple => {
+        apple.newlyAdded = true; // Set newlyAdded flag for all apples after placement
+    });
 }
 
 function drawApples() {
     apples.forEach(apple => {
-        ctx.fillStyle = apple.color;
-        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
+        // Check if the apple has moved or is newly added
+        if (apple.moved || apple.newlyAdded) {
+            ctx.fillStyle = apple.color;
+            ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
+
+            // Reset the flags
+            apple.moved = false;
+            apple.newlyAdded = false;
+        }
     });
 }
 
@@ -132,6 +142,8 @@ function moveSnake() {
             ScoreText.textContent = "Score: " + score;
             apples.splice(index, 1);
             placeApples();
+        } else {
+            apple.moved = true; // Set moved flag for apples not eaten by the snake
         }
     });
 
