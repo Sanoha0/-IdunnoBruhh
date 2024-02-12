@@ -1,6 +1,6 @@
 const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
-const ScoreText = document.querySelector("#Score");
+const Score = document.querySelector("#Score");
 const ResetBtn = document.querySelector("#ResetBtn");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
