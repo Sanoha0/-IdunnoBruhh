@@ -1,33 +1,3 @@
-function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
-    snake.unshift(head);
-
-    let ateFood = false;
-    let eatenAppleIndex = -1;
-
-    for (let i = 0; i < apples.length; i++) {
-        if (snake[0].x === apples[i].x && snake[0].y === apples[i].y) {
-            score += 10;
-            ScoreText.textContent = "Score: " + score;
-            eatenAppleIndex = i;
-            ateFood = true;
-            break; // Break the loop after finding the eaten apple
-        }
-    }
-
-    if (!ateFood) {
-        snake.pop();
-    }
-
-    if (ateFood) {
-        apples.splice(eatenAppleIndex, 1);
-        createFood(); // Create a new apple after eating one
-    }
-}
-Now, let's integrate this code into your existing JavaScript:
-
-javascript
-Copy code
 document.addEventListener("DOMContentLoaded", function() {
     const GameBoard = document.querySelector("#GameBoard");
     const ctx = GameBoard.getContext("2d");
@@ -40,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const SnakeBorder = "black";
     const FoodColor = "red";
     const UnitSize = 25;
-    const maxApples = 5; // Maximum number of apples
+    const maxApples = 3; // Maximum number of apples
     let running = false;
     let xVelocity = UnitSize;
     let yVelocity = 0;
@@ -124,25 +94,22 @@ document.addEventListener("DOMContentLoaded", function() {
         snake.unshift(head);
 
         let ateFood = false;
-        let eatenAppleIndex = -1;
 
+        // Check if the snake's head collides with any apple
         for (let i = 0; i < apples.length; i++) {
             if (snake[0].x === apples[i].x && snake[0].y === apples[i].y) {
                 score += 10;
                 ScoreText.textContent = "Score: " + score;
-                eatenAppleIndex = i;
                 ateFood = true;
-                break; // Break the loop after finding the eaten apple
+                apples.splice(i, 1); // Remove the eaten apple
+                createFood(); // Create a new apple
+                break; // Exit the loop after eating one apple
             }
         }
 
+        // If the snake didn't eat an apple, remove the tail segment
         if (!ateFood) {
             snake.pop();
-        }
-
-        if (ateFood) {
-            apples.splice(eatenAppleIndex, 1);
-            createFood(); // Create a new apple after eating one
         }
     }
 
