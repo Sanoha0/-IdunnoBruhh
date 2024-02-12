@@ -86,6 +86,8 @@ function createApples() {
             apples.push({ x: randomX, y: randomY, color: color });
         }
     }
+
+    console.log("Apples:", apples); // Log apples to check if they are being created correctly
 }
 
 function drawApples() {
