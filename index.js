@@ -102,8 +102,8 @@ function placePaleGreenApple() {
 }
 
 function getRandomPosition() {
-    const posX = Math.floor(Math.random() * GameWidth);
-    const posY = Math.floor(Math.random() * GameHeight);
+    const posX = Math.floor(Math.random() * (GameWidth - UnitSize)); // Adjusted to ensure the apple stays within canvas
+    const posY = Math.floor(Math.random() * (GameHeight - UnitSize)); // Adjusted to ensure the apple stays within canvas
     return { x: posX, y: posY };
 }
 
@@ -133,13 +133,17 @@ function drawApples() {
 }
 
 function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
+    const headX = snake[0].x + xVelocity + UnitSize / 2; // Adjusted to check collision at center of the snake's head
+    const headY = snake[0].y + yVelocity + UnitSize / 2; // Adjusted to check collision at center of the snake's head
+    const head = { x: headX, y: headY };
     snake.unshift(head);
 
     let appleEaten = false;
 
     apples.forEach((apple, index) => {
-        if (apple.x === snake[0].x && apple.y === snake[0].y) {
+        const appleCenterX = apple.x + UnitSize / 2;
+        const appleCenterY = apple.y + UnitSize / 2;
+        if (appleCenterX === headX && appleCenterY === headY) { // Adjusted collision detection to check for center of apple
             score += 10;
             ScoreText.textContent = "Score: " + score;
             apples.splice(index, 1);
