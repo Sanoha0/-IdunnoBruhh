@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
             setTimeout(() => {
                 clearBoard(); // Clear the board first
                 drawFood();
-                moveSnake();
+                snakeMoves(); // Call snakeMoves instead of moveSnake
                 drawSnake();
                 if (!checkGameOver()) {
                     nextTick();
@@ -89,19 +89,25 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    function moveSnake() {
-        const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
-        snake.unshift(head);
+    function snakeMoves() {
+        // Calculate the new head position
+        const newHead = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
 
-        let ateFood = checkEatFood();
-        
-        if (!ateFood) {
+        // Check if the new head collides with any apple
+        const ateFood = checkAppleCollision(newHead);
+
+        // If the snake ate an apple, increment the score and remove the eaten apple
+        if (ateFood) {
+            score += 10;
+            ScoreText.textContent = "Score: " + score;
+            removeEatenApple(newHead);
+        } else {
+            // If no apple was eaten, remove the tail of the snake to simulate movement
             snake.pop();
         }
 
-        if (ateFood || apples.length === 0) {
-            createFood();
-        }
+        // Add the new head to the snake
+        snake.unshift(newHead);
     }
 
     function drawSnake() {
@@ -156,15 +162,25 @@ document.addEventListener("DOMContentLoaded", function() {
         ctx.fillText("Game Over!", 200, 300);
     }
 
-    function checkEatFood() {
+    function checkAppleCollision(newHead) {
+        // Iterate through each apple to check for collision with the new head
         for (let i = 0; i < apples.length; i++) {
-            if (snake[0].x === apples[i].x && snake[0].y === apples[i].y) {
-                apples.splice(i, 1);
-                score += 10;
-                ScoreText.textContent = "Score: " + score;
-                return true;
+            if (newHead.x === apples[i].x && newHead.y === apples[i].y) {
+                return true; // Collision detected
             }
         }
-        return false;
+        return false; // No collision detected
+    }
+
+    function removeEatenApple(newHead) {
+        // Iterate through each apple to find the one eaten by the snake
+        for (let i = 0; i < apples.length; i++) {
+            if (newHead.x === apples[i].x && newHead.y === apples[i].y) {
+                // Remove the eaten apple from the apples array
+                apples.splice(i, 1);
+                // Break the loop as we found the eaten apple
+                break;
+            }
+        }
     }
 });
