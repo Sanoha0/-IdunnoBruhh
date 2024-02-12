@@ -74,12 +74,17 @@ function clearBoard() {
 
 function createApples() {
     while (apples.length < 5) {
-        const apple = {
-            x: Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize,
-            y: Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize,
-            color: AppleColors[Math.floor(Math.random() * AppleColors.length)]
-        };
-        apples.push(apple);
+        const randomX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+        const randomY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+        const color = AppleColors[Math.floor(Math.random() * AppleColors.length)];
+
+        // Check if the random position conflicts with existing apples
+        const conflict = apples.some(apple => apple.x === randomX && apple.y === randomY);
+
+        // If no conflict, add the apple
+        if (!conflict) {
+            apples.push({ x: randomX, y: randomY, color: color });
+        }
     }
 }
 
