@@ -94,11 +94,12 @@ document.addEventListener("DOMContentLoaded", function() {
         snake.unshift(head);
 
         let ateFood = false;
+        let eatenAppleIndex = -1;
         apples.forEach((apple, index) => {
             if (snake[0].x === apple.x && snake[0].y === apple.y) {
                 score += 10;
                 ScoreText.textContent = "Score: " + score;
-                apples.splice(index, 1);
+                eatenAppleIndex = index;
                 ateFood = true;
             }
         });
@@ -107,7 +108,10 @@ document.addEventListener("DOMContentLoaded", function() {
             snake.pop();
         }
 
-        if (apples.length === 0 || ateFood) {
+        if (ateFood) {
+            apples.splice(eatenAppleIndex, 1);
+            createFood();
+        } else if (apples.length === 0) {
             createFood();
         }
     }
