@@ -29,7 +29,7 @@ gameStart();
 function gameStart() {
     running = true;
     ScoreText.textContent = score;
-    createApples();
+    placeApples();
     drawApples();
     nextTick();
 }
@@ -73,54 +73,46 @@ function clearBoard() {
 
 function placeRedApple() {
     const color = "red";
-    const position = getRandomPositionForColor();
+    const position = getRandomPosition();
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
 function placeGreenApple() {
     const color = "green";
-    const position = getRandomPositionForColor();
+    const position = getRandomPosition();
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
 function placeYellowApple() {
     const color = "yellow";
-    const position = getRandomPositionForColor();
+    const position = getRandomPosition();
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
 function placeOrangeApple() {
     const color = "orange";
-    const position = getRandomPositionForColor();
+    const position = getRandomPosition();
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
 function placePaleGreenApple() {
     const color = "palegreen";
-    const position = getRandomPositionForColor();
+    const position = getRandomPosition();
     apples.push({ x: position.x, y: position.y, color: color });
 }
 
-function getRandomPositionForColor() {
+function getRandomPosition() {
     const posX = Math.floor(Math.random() * GameWidth);
     const posY = Math.floor(Math.random() * GameHeight);
     return { x: posX, y: posY };
 }
 
-function createApples() {
-    const appleFunctions = [
-        placeRedApple,
-        placeGreenApple,
-        placeYellowApple,
-        placeOrangeApple,
-        placePaleGreenApple
-    ];
-
-    while (apples.length < 5) {
-        const randomIndex = Math.floor(Math.random() * appleFunctions.length);
-        const selectedFunction = appleFunctions[randomIndex];
-        selectedFunction();
-    }
+function placeApples() {
+    placeRedApple();
+    placeGreenApple();
+    placeYellowApple();
+    placeOrangeApple();
+    placePaleGreenApple();
 }
 
 function drawApples() {
@@ -139,7 +131,7 @@ function moveSnake() {
             score += 10;
             ScoreText.textContent = "Score: " + score;
             apples.splice(index, 1);
-            createApples();
+            placeApples();
         }
     });
 
