@@ -2,44 +2,37 @@ const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
 const ScoreText = document.querySelector("#Score");
 const ResetBtn = document.querySelector("#ResetBtn");
-const UpBtn = document.querySelector("#UpBtn");
-const DownBtn = document.querySelector("#DownBtn");
-const LeftBtn = document.querySelector("#LeftBtn");
-const RightBtn = document.querySelector("#RightBtn");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
 const BoardBg = "black";
 const SnakeColor = "lightblue";
 const SnakeBorder = "black";
-const AppleColors = ["red", "green", "yellow", "orange", "palegreen"];
+const FoodColor = "red";
 const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
+let foodX;
+let foodY;
 let score = 0;
 let snake = [
-    { x: UnitSize * 2, y: 0 }, // Start with just two blocks
-    { x: UnitSize, y: 0 }
+    { x: UnitSize * 4, y: 0 },
+    { x: UnitSize * 3, y: 0 },
+    { x: UnitSize * 2, y: 0 },
+    { x: UnitSize, y: 0 },
+    { x: 0, y: 0 }
 ];
-let apples = [];
 
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
-
-// Add event listeners to directional buttons
-UpBtn.addEventListener("click", () => changeDirection("ArrowUp"));
-DownBtn.addEventListener("click", () => changeDirection("ArrowDown"));
-LeftBtn.addEventListener("click", () => changeDirection("ArrowLeft"));
-RightBtn.addEventListener("click", () => changeDirection("ArrowRight"));
 
 gameStart();
 
 function gameStart() {
     running = true;
-    ScoreText.textContent = "Score: " + score;
-    placeApples();
-    drawApples();
-    drawSnake();
+    ScoreText.textContent = score;
+    createFood();
+    drawFood();
     nextTick();
 }
 
@@ -47,9 +40,9 @@ function nextTick() {
     if (running) {
         setTimeout(() => {
             clearBoard();
+            drawFood();
             moveSnake();
             drawSnake();
-            drawApples();
             if (!checkGameOver()) {
                 nextTick();
             } else {
@@ -65,10 +58,12 @@ function resetGame() {
     xVelocity = UnitSize;
     yVelocity = 0;
     snake = [
+        { x: UnitSize * 4, y: 0 },
+        { x: UnitSize * 3, y: 0 },
         { x: UnitSize * 2, y: 0 },
-        { x: UnitSize, y: 0 }
+        { x: UnitSize, y: 0 },
+        { x: 0, y: 0 }
     ];
-    apples = [];
     gameStart();
 }
 
@@ -77,60 +72,28 @@ function clearBoard() {
     ctx.fillRect(0, 0, GameWidth, GameHeight);
 }
 
-function getRandomPosition() {
-    const posX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
-    const posY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
-    return { x: posX, y: posY };
+function createFood() {
+    foodX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+    foodY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
 }
 
-function placeApple() {
-    const color = AppleColors[Math.floor(Math.random() * AppleColors.length)];
-    const position = getRandomPosition();
-    apples.push({ x: position.x, y: position.y, color: color });
-}
-
-function placeApples() {
-    for (let i = 0; i < 5; i++) {
-        placeApple();
-    }
-}
-
-function drawApples() {
-    apples.forEach(apple => {
-        ctx.fillStyle = apple.color;
-        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
-    });
+function drawFood() {
+    ctx.fillStyle = FoodColor;
+    ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
 function moveSnake() {
-    const headX = snake[0].x + xVelocity; 
-    const headY = snake[0].y + yVelocity;
-    const head = { x: headX, y: headY };
-
-    let appleEaten = false;
-
-    apples.forEach((apple, index) => {
-        if (apple.x === headX && apple.y === headY) {
-            score += 10;
-            ScoreText.textContent = "Score: " + score;
-            apples.splice(index, 1);
-            appleEaten = true;
-        }
-    });
-
-    if (appleEaten) {
-        // Add a new block to the end of the snake's body
-        snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
-        placeApple();
-    }
-
+    const head = { x: snake[0].x + xVelocity, 
+                    y: snake[0].y + yVelocity };
     snake.unshift(head);
-    snake.pop();
 
-    if (xVelocity !== 0) {
-        yVelocity = 0;
-    } else if (yVelocity !== 0) {
-        xVelocity = 0;
+    const ateFood = snake[0].x === foodX && snake[0].y === foodY;
+    if (ateFood) {
+        score += 10;
+        ScoreText.textContent = "Score: " + score;
+        createFood();
+    } else {
+        snake.pop();
     }
 }
 
