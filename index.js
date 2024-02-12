@@ -1,6 +1,6 @@
 const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
-const ScoreText = document.querySelector("#Score");
+const ScoreText = document.querySelector("#ScoreText"); // Corrected the id here
 const ResetBtn = document.querySelector("#ResetBtn");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
@@ -144,5 +144,7 @@ function checkGameOver() {
 }
 
 function displayGameOver() {
-    console.log("Game Over!");
+    ctx.fillStyle = "white";
+    ctx.font = "40px Arial";
+    ctx.fillText("Game Over!", 200, 300);
 }
