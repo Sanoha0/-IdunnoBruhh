@@ -1,6 +1,6 @@
 const GameBoard = document.querySelector("#GameBoard");
 const ctx = GameBoard.getContext("2d");
-const ScoreText = document.querySelector("#ScoreText"); // Corrected the id here
+const ScoreText = document.querySelector("#ScoreText");
 const ResetBtn = document.querySelector("#ResetBtn");
 const GameWidth = GameBoard.width;
 const GameHeight = GameBoard.height;
@@ -9,11 +9,10 @@ const SnakeColor = "lightblue";
 const SnakeBorder = "black";
 const FoodColor = "red";
 const UnitSize = 25;
+const maxApples = 5; // Maximum number of apples
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
-let foodX;
-let foodY;
 let score = 0;
 let snake = [
     { x: UnitSize * 4, y: 0 },
@@ -22,6 +21,7 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
+let apples = []; // Array to hold multiple apples
 
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
@@ -73,24 +73,35 @@ function clearBoard() {
 }
 
 function createFood() {
-    foodX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
-    foodY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+    apples = [];
+    for (let i = 0; i < maxApples; i++) {
+        let appleX = Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize;
+        let appleY = Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize;
+        apples.push({ x: appleX, y: appleY });
+    }
 }
 
 function drawFood() {
     ctx.fillStyle = FoodColor;
-    ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
+    apples.forEach(apple => {
+        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
+    });
 }
 
 function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, 
-                    y: snake[0].y + yVelocity };
+    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
     snake.unshift(head);
 
-    const ateFood = snake[0].x === foodX && snake[0].y === foodY;
-    if (ateFood) {
-        score += 10;
-        ScoreText.textContent = "Score: " + score;
+    apples.forEach((apple, index) => {
+        if (snake[0].x === apple.x && snake[0].y === apple.y) {
+            score += 10;
+            ScoreText.textContent = "Score: " + score;
+            apples.splice(index, 1);
+            createFood();
+        }
+    });
+
+    if (apples.length === 0) {
         createFood();
     } else {
         snake.pop();
