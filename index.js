@@ -8,6 +8,7 @@ const BoardBg = "black";
 const SnakeColor = "lightblue";
 const SnakeBorder = "black";
 const AppleColors = ["red", "yellow", "lightgreen", "pastelgreen", "orange"]; // New array for apple colors
+const MaxApples = 5; // Maximum number of apples allowed
 const UnitSize = 25;
 let running = false;
 let xVelocity = UnitSize;
@@ -22,6 +23,7 @@ let snake = [
     { x: UnitSize, y: 0 },
     { x: 0, y: 0 }
 ];
+let apples = []; // Array to store apples
 
 window.addEventListener("keydown", changeDirection);
 ResetBtn.addEventListener("click", resetGame);
@@ -32,7 +34,9 @@ function gameStart() {
     running = true;
     ScoreText.textContent = score;
     createFood();
+    createApples(); // Create apples when the game starts
     drawFood();
+    drawApples(); // Draw apples when the game starts
     nextTick();
 }
 
@@ -41,6 +45,7 @@ function nextTick() {
         setTimeout(() => {
             clearBoard();
             drawFood();
+            drawApples();
             moveSnake();
             drawSnake();
             if (!checkGameOver()) {
@@ -78,18 +83,31 @@ function createFood() {
 }
 
 function drawFood() {
-    // Randomly select a color from AppleColors array
-    const colorIndex = Math.floor(Math.random() * AppleColors.length);
-    const color = AppleColors[colorIndex];
-    
-    // Apply the color to the apple
-    ctx.fillStyle = color;
+    ctx.fillStyle = "red"; // Always draw food as red
     ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
+function createApples() {
+    apples = []; // Clear previous apples
+    for (let i = 0; i < MaxApples; i++) {
+        let apple = {
+            x: Math.floor(Math.random() * (GameWidth / UnitSize)) * UnitSize,
+            y: Math.floor(Math.random() * (GameHeight / UnitSize)) * UnitSize,
+            color: AppleColors[Math.floor(Math.random() * AppleColors.length)]
+        };
+        apples.push(apple);
+    }
+}
+
+function drawApples() {
+    apples.forEach(apple => {
+        ctx.fillStyle = apple.color;
+        ctx.fillRect(apple.x, apple.y, UnitSize, UnitSize);
+    });
+}
+
 function moveSnake() {
-    const head = { x: snake[0].x + xVelocity, 
-                    y: snake[0].y + yVelocity };
+    const head = { x: snake[0].x + xVelocity, y: snake[0].y + yVelocity };
     snake.unshift(head);
 
     const ateFood = snake[0].x === foodX && snake[0].y === foodY;
@@ -100,6 +118,15 @@ function moveSnake() {
     } else {
         snake.pop();
     }
+    // Check if snake ate an apple
+    apples.forEach((apple, index) => {
+        if (snake[0].x === apple.x && snake[0].y === apple.y) {
+            score += 20; // Increase score for eating an apple
+            ScoreText.textContent = "Score: " + score;
+            apples.splice(index, 1); // Remove the eaten apple
+            createApples(); // Create a new apple
+        }
+    });
 }
 
 function drawSnake() {
