@@ -7,8 +7,8 @@ const GameHeight = GameBoard.height;
 const BoardBg = "black";
 const SnakeColor = "lightblue";
 const SnakeBorder = "black";
+const AppleColors = ["red", "yellow", "light-green", "pastel-green", "orange"]; // New array for apple colors
 const UnitSize = 25;
-const AppleColors = ["red", "yellow", "lightgreen", "#77DD77", "orange"]; // Array of colors for apples
 let running = false;
 let xVelocity = UnitSize;
 let yVelocity = 0;
@@ -78,11 +78,12 @@ function createFood() {
 }
 
 function drawFood() {
-    // Choose a color from the predefined array of colors
+    // Randomly select a color from AppleColors array
     const colorIndex = Math.floor(Math.random() * AppleColors.length);
-    const selectedColor = AppleColors[colorIndex];
+    const color = AppleColors[colorIndex];
     
-    ctx.fillStyle = selectedColor;
+    // Apply the color to the apple
+    ctx.fillStyle = color;
     ctx.fillRect(foodX, foodY, UnitSize, UnitSize);
 }
 
