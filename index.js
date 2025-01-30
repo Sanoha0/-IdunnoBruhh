@@ -105,3 +105,4 @@ document.addEventListener('keydown', keyDown);
 
 // Main game loop
 const interval = setInterval(update, speed);
+
